@@ -1,3 +1,3 @@
-﻿using DesignPatterns.Singleton;
+﻿using DesignPatterns.Builder;
 
 new Client().Main();
