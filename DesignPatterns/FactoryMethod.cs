@@ -1,9 +1,7 @@
 ﻿namespace DesignPatterns.FactoryMethod
 {
     public class FactoryMethod
-    {
-
-    }
+    { }
 
     public abstract class Creator
     {
