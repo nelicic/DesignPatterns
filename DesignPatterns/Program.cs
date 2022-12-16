@@ -1,3 +1,3 @@
-﻿using DesignPatterns.Prototype;
+﻿using DesignPatterns.Bridge;
 
 new Client().Main();
