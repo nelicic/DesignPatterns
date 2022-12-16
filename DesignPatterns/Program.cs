@@ -1,3 +1,3 @@
-﻿using DesignPatterns.Adapter;
+﻿using DesignPatterns.Composite;
 
 new Client().Main();
