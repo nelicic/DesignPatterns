@@ -1,4 +1,3 @@
-﻿using DesignPatterns.Facade;
-;
+﻿using DesignPatterns.FlyWeight;
 
 new Client().Main();
