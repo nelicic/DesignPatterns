@@ -1,3 +1,3 @@
-﻿using DesignPatterns.ChainOfResponsibility;
+﻿using DesignPatterns.Command;
 
 new Client().Main();
