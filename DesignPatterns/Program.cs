@@ -1,3 +1,3 @@
-﻿using DesignPatterns.State;
+﻿using DesignPatterns.Strategy;
 
 new Client().Main();
