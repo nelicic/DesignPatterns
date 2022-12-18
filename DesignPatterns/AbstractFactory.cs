@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DesignPatterns.AbstractFactory
+﻿namespace DesignPatterns.AbstractFactory
 {
     public class AbstractFactory
     { }
@@ -125,6 +119,97 @@ namespace DesignPatterns.AbstractFactory
             chair.DisplayChair();
             armChair.DisplayArmChair();
             couch.DisplayCouch();
+        }
+    }
+}
+
+
+namespace DesignPatterns.AbstractFactoryV2
+{
+    public interface IToyFactory
+    {
+        Bear GetBear();
+        Cat GetCat();
+    }
+
+    public abstract class AnimalToy
+    {
+        public string Name { get; set; }
+        public AnimalToy(string name) => Name = name;  
+    }
+
+    public abstract class Cat : AnimalToy
+    {
+        protected Cat(string name) : base(name) { }
+    }
+
+    public abstract class Bear : AnimalToy
+    {
+        protected Bear(string name) : base(name) { }
+    }
+
+    public class WoodenBear : Bear
+    {
+        public WoodenBear(string name = "Wooden Bear") : base(name) { }
+    }
+
+    public class WoodenCat : Cat
+    {
+        public WoodenCat(string name = "Wooden Cat") : base(name) { }
+    }
+
+    public class TeddyBear : Bear
+    {
+        public TeddyBear(string name = "Teddy Bear") : base(name) { }
+    }
+    
+    public class TeddyCat : Cat
+    {
+        public TeddyCat(string name = "Teddy Cat") : base(name) { }
+    }
+
+    public class TeddyFactory : IToyFactory
+    {
+        public Bear GetBear()
+        {
+            return new TeddyBear();
+        }
+
+        public Cat GetCat()
+        {
+            return new TeddyCat();
+        }
+    }
+
+    public class WoodenFactory : IToyFactory
+    {
+        public Bear GetBear()
+        {
+            return new WoodenBear();
+        }
+
+        public Cat GetCat()
+        {
+            return new WoodenCat();
+        }
+    }
+
+    public class Client
+    {
+        public void Main()
+        {
+            IToyFactory factory = new TeddyFactory();
+            Bear bear = factory.GetBear();
+            Cat cat = factory.GetCat();
+            Console.WriteLine(bear.Name);
+            Console.WriteLine(cat.Name);
+
+
+            factory = new WoodenFactory();
+            bear = factory.GetBear();
+            cat = factory.GetCat();
+            Console.WriteLine(bear.Name);
+            Console.WriteLine(cat.Name);
         }
     }
 }
