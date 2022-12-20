@@ -1,3 +1,3 @@
-﻿using DesignPatterns.BuilderV2;
+﻿using DesignPatterns.FactoryMethodV2;
 
 new Client().Main();
