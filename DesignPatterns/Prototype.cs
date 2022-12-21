@@ -79,3 +79,78 @@
         }
     }
 }
+
+namespace DesignPatterns.PrototypeV2
+{
+    public class CalendarPrototype
+    {
+        public virtual CalendarPrototype Clone()
+        {
+            return (CalendarPrototype)MemberwiseClone();
+        }
+    }
+
+    public class CalendarEvent : CalendarPrototype
+    {
+        public Attendee[] Attendees { get; set; }
+        public Priority Priority { get; set; }
+        public DateTime StartDateAndTime { get; set; }
+
+        public override CalendarPrototype Clone()
+        {
+            var copy = (CalendarEvent)base.Clone();
+            var copiedAttendees = (Attendee[])Attendees.Clone();
+            copy.Attendees = copiedAttendees;
+            return copy;
+        }
+    }
+
+    public enum Priority
+    { 
+        High,
+        Low
+    }
+
+    public class Attendee
+    {
+        public string Name { get; set; }
+        public string Email { get; set; }
+    }
+
+    public class Client
+    {
+        public static CalendarEvent GetExistingEvent()
+        {
+            var beerParty = new CalendarEvent();
+            var friends = new Attendee[1];
+
+            var person = new Attendee { Name = "Joe Schmoe" };
+
+            friends[0] = person;
+
+            beerParty.Attendees = friends;
+            beerParty.StartDateAndTime = new DateTime(2022, 7, 23, 19, 0, 0);
+            beerParty.Priority = Priority.High;
+
+            return beerParty;
+        }
+
+        public void Main()
+        {
+            var beerParty = GetExistingEvent();
+            var nextFridayEvent = (CalendarEvent)beerParty.Clone();
+            nextFridayEvent.StartDateAndTime = new DateTime(2022, 7, 30, 19, 0, 0);
+
+            nextFridayEvent.Attendees[0].Email = "person@gmail.com";
+            nextFridayEvent.Priority = Priority.Low;
+            if (beerParty.Attendees != nextFridayEvent.Attendees)
+                Console.WriteLine("GOOD: Each event has own list of attendees.");
+
+            if (beerParty.Attendees[0].Email == nextFridayEvent.Attendees[0].Email)
+                Console.WriteLine("GOOD: Update to my e-mail address will be reflected in all events.");
+
+            if (beerParty.Priority != nextFridayEvent.Priority)
+                Console.WriteLine("GOOD: Each event should have own priority object, fully-copied.");
+        }
+    }
+}
