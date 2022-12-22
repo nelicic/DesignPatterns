@@ -48,3 +48,61 @@
         }
     }
 }
+
+namespace DesignPatterns.AdapterV2
+{
+    class OldElectricitySystem
+    {
+        public string MatchThinSocket()
+        {
+            return "220V - old electricity system";
+        }
+    }
+
+    interface INewElectricitySystem
+    {
+        public string MatchWideSocket();
+    }
+
+    class NewElectricitySystem : INewElectricitySystem
+    {
+        public string MatchWideSocket()
+        {
+            return "220V - new electricity system";
+        }
+    }
+
+    class Adapter : INewElectricitySystem
+    {
+        private readonly OldElectricitySystem _adtaptee;
+        public Adapter(OldElectricitySystem adaptee)
+        {
+            _adtaptee = adaptee;
+        }
+        public string MatchWideSocket()
+        {
+            return _adtaptee.MatchThinSocket();
+        }
+    }
+
+    class ElectricityConsumer
+    {
+        public static void ChargeNotebook(INewElectricitySystem electricitySystem)
+        {
+            Console.WriteLine(electricitySystem.MatchWideSocket());
+        }
+    }
+
+    class Client
+    {
+        public void Main()
+        {
+            var newElectricitySystem = new NewElectricitySystem();
+            ElectricityConsumer.ChargeNotebook(newElectricitySystem);
+
+            var oldElectricitySystem = new OldElectricitySystem();
+            Adapter adapter = new Adapter(oldElectricitySystem);
+            ElectricityConsumer.ChargeNotebook(adapter);
+        }
+    }
+}

@@ -1,3 +1,3 @@
-﻿using DesignPatterns.SingletonV2;
+﻿using DesignPatterns.AdapterV2;
 
 new Client().Main();
