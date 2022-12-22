@@ -1,3 +1,3 @@
-﻿using DesignPatterns.AdapterV2;
+﻿using DesignPatterns.BridgeV2;
 
 new Client().Main();
