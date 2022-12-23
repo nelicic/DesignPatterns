@@ -1,3 +1,3 @@
-﻿using DesignPatterns.CompositeV2;
+﻿using DesignPatterns.DecoratorV2;
 
 new Client().Main();

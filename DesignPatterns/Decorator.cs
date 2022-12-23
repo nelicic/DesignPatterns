@@ -80,3 +80,59 @@ namespace DesignPatterns.Decorator
         }
     }
 }
+
+
+namespace DesignPatterns.DecoratorV2
+{ 
+    class Car
+    {
+        protected string BrandName { get; set; }
+        public virtual void Go()
+        {
+            Console.WriteLine("I'm " + BrandName + "and I'm on my way...");
+        }
+    }
+
+    class Mercedes : Car
+    {
+        public Mercedes()
+        {
+            BrandName = "Mercedes";
+        }
+    }
+
+    class DecoratorCar : Car
+    { 
+        protected Car DecoratedCar { get; set; }
+        public DecoratorCar(Car decoratedCar)
+        {
+            DecoratedCar = decoratedCar;
+        }
+
+        public override void Go()
+        {
+            DecoratedCar.Go();
+        }
+    }
+
+    class AmbulanceCar : DecoratorCar
+    {
+        public AmbulanceCar(Car decoratedCar) : base(decoratedCar)
+        { }
+
+        public override void Go()
+        {
+            base.Go();
+            Console.WriteLine("Beep beeep beep");
+        }
+    }
+
+    public class Client
+    {
+        public void Main()
+        {
+            var doctorsMers = new AmbulanceCar(new Mercedes());
+            doctorsMers.Go();
+        }
+    }
+}
