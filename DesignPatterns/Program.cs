@@ -1,3 +1,3 @@
-﻿using DesignPatterns.FlyWeightV2;
+﻿using DesignPatterns.ProxyV2;
 
 new Client().Main();
