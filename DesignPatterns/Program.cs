@@ -1,3 +1,3 @@
-﻿using DesignPatterns.DecoratorV2;
+﻿using DesignPatterns.FlyWeightV2;
 
 new Client().Main();

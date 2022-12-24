@@ -134,3 +134,78 @@ namespace DesignPatterns.FlyWeight
         }
     }
 }
+
+
+namespace DesignPatterns.FlyWeightV2
+{
+    public abstract class Unit
+    { 
+        public string Name { get; protected set; }
+        public int Health { get; protected set; }
+        public Image Picture { get; protected set; }
+    }
+
+    public class Image
+    { 
+        public static Image Load(string str) => new Image();
+    }
+
+    class Client
+    {
+        public void Main()
+        {
+            var list = ParserHTML();
+        }
+        public List<Unit> ParserHTML()
+        {
+            var units = new List<Unit>();
+            for (int i = 0; i < 150; i++)
+                units.Add(new Dragon());
+            for (int i = 0; i < 500; i++)
+                units.Add(new Goblin());
+
+            Console.WriteLine("Dragons and Goblins has been parsed from HTML page");
+            return units;
+        }
+    }
+
+    class UnitImagesFactory
+    {
+        public static Dictionary<Type, Image> Images = new Dictionary<Type, Image>();
+        public static Image CreateDragonImage()
+        {
+            if (!Images.ContainsKey(typeof(Dragon)))
+                Images.Add(typeof(Dragon), Image.Load("Dragon.jpg"));
+            return Images[typeof(Dragon)];
+        }
+
+        public static Image CreateGoblinImage()
+        {
+            if (!Images.ContainsKey(typeof(Goblin)))
+                Images.Add(typeof(Goblin), Image.Load("Goblin.jpg"));
+            return Images[typeof(Goblin)];
+        }
+    }
+
+    class Dragon : Unit
+    {
+        public Dragon()
+        {
+            Name = "Dragon";
+            Health = 8;
+            // Picture = Image.Load("Dragon.jpg");
+            Picture = UnitImagesFactory.CreateDragonImage();
+        }
+    }
+
+    class Goblin : Unit
+    {
+        public Goblin()
+        {
+            Name = "Goblin";
+            Health = 8;
+            // Picture = Image.Load("Goblin.jpg");
+            Picture = UnitImagesFactory.CreateGoblinImage();
+        }
+    }
+}
