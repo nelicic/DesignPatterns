@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DesignPatterns.ChainOfResponsibility
+﻿namespace DesignPatterns.ChainOfResponsibility
 {
     public interface IHandler
     {
@@ -112,6 +106,113 @@ namespace DesignPatterns.ChainOfResponsibility
                     Console.WriteLine($"   {food} was left untouched.");
                 }
             }
+        }
+    }
+}
+
+namespace DesignPatterns.ChainOfResponsibilityV2
+{
+    public abstract class WierdCafeVisitor
+    {
+        public WierdCafeVisitor CafeVisitor { get; private set; }
+        protected WierdCafeVisitor(WierdCafeVisitor cafeVisitor)
+        {
+            CafeVisitor = cafeVisitor;
+        }
+        public virtual void HandleFood(Food food)
+        {
+            if (CafeVisitor != null)
+            {
+                CafeVisitor.HandleFood(food);
+            }
+        }
+    }
+
+    public class BestFriend : WierdCafeVisitor
+    {
+        public List<Food> CoffeeContainingFood { get; private set; }
+        public BestFriend(WierdCafeVisitor cafeVisitor) : base(cafeVisitor)
+        {
+            CoffeeContainingFood = new List<Food>();
+        }
+
+        public override void HandleFood(Food food)
+        {
+            if (food.Ingredients.Contains("Meat"))
+            {
+                Console.WriteLine("BestFriend: I just ate {0}. It was tasty.", food.Name);
+                return;
+            }
+
+            if (food.Ingredients.Contains("Coffee") && CoffeeContainingFood.Count < 1)
+            {
+                CoffeeContainingFood.Add(food);
+                Console.WriteLine("BestFriend: I have to take something with coffee. {0} looks fine.", food.Name);
+                return;
+            }
+        }
+    }
+
+    public class GirlFriend : WierdCafeVisitor
+    {
+        public GirlFriend(WierdCafeVisitor cafeVisitor) : base(cafeVisitor)
+        { }
+
+        public override void HandleFood(Food food)
+        {
+            if (food.Name == "Cappucino")
+            {
+                Console.WriteLine("Girlfriend: My lovely cappucino!!!");
+                return;
+            }
+            base.HandleFood(food);
+        }
+    }
+
+    public class Me : WierdCafeVisitor
+    {
+        public Me(WierdCafeVisitor cafeVisitor) : base(cafeVisitor)
+        { }
+
+        public override void HandleFood(Food food)
+        {
+            if (food.Name == "Soup with potato")
+            {
+                Console.WriteLine("Woww PATATA!!!");
+                return;
+            }
+            base.HandleFood(food);
+        }
+    }
+
+    public class Food
+    {
+        public string Name { get; set; }
+        public List<string> Ingredients { get; set; }
+        public Food(string name, List<string> ingredients)
+        {
+            Name = name;
+            Ingredients = ingredients;
+        }
+    }
+
+    public class Client
+    { 
+        public void Main()
+        {
+            var cappuccino1 = new Food("Cappuccino", new List<string> {"Coffee", "Milk", "Sugar"});
+            var cappuccino2 = new Food("Cappuccino", new List<string> { "Coffee", "Milk" });
+            var soup1 = new Food("Soup with meat", new List<string> {"Meat", "Water", "Potato"});
+            var soup2 = new Food("Soup with potato", new List<string> { "Water", "Potato" });
+            var meat = new Food("Meat", new List<string> { "Meat" });
+            var girlFriend = new GirlFriend(null);
+            var me = new Me(girlFriend);
+            var bestFriend = new BestFriend(me);
+            bestFriend.HandleFood(cappuccino1);
+            bestFriend.HandleFood(cappuccino2);
+            bestFriend.HandleFood(soup1);
+            bestFriend.HandleFood(soup2);
+            bestFriend.HandleFood(meat);
         }
     }
 }

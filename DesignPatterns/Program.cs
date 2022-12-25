@@ -1,3 +1,3 @@
-﻿using DesignPatterns.ProxyV2;
+﻿using DesignPatterns.ChainOfResponsibilityV2;
 
 new Client().Main();
