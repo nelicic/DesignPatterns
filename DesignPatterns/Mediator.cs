@@ -102,3 +102,83 @@
         }
     }
 }
+
+
+namespace DesignPatterns.MediatorV2
+{
+    public class BodyPart
+    {
+        private readonly Brain _brain;
+
+        public BodyPart(Brain brain)
+        {
+            _brain = brain;
+        }
+
+        public void Changed()
+        {
+            _brain.SomethingHappenedToBodyPart(this);
+        }
+    }
+
+    public class Ear : BodyPart
+    {
+        private string _sounds = string.Empty;
+        public Ear(Brain brain) : base(brain) { }
+
+        public void HearSomething()
+        {
+            Console.WriteLine("Enter what you hear:");
+            _sounds = Console.ReadLine();
+
+            Changed();
+        }
+        public string GetSounds() => _sounds;
+    }
+
+    public class Face : BodyPart
+    {
+        public Face(Brain brain) : base(brain) { }
+        public void Smile() => Console.WriteLine("FACE: Smiling...");
+    }
+
+    public class Brain
+    {
+        public Ear Ear { get; private set; }
+        public Face Face { get; private set; }
+
+        public Brain()
+        {
+            CreateBodyParts();
+        }
+
+        private void CreateBodyParts()
+        {
+            Ear = new Ear(this);
+            Face = new Face(this);
+        }
+
+        public void SomethingHappenedToBodyPart(BodyPart bodyPart)
+        {
+            if (bodyPart is Ear)
+            {
+                string heardSounds = ((Ear)bodyPart).GetSounds();
+
+                if (heardSounds.Contains("cool"))
+                {
+                    Face.Smile();
+                }
+            }
+        }
+    }
+
+    public class Client
+    {
+        public void Main()
+        {
+            Brain brain = new Brain();
+            Ear ear = new Ear(brain);
+            ear.HearSomething();
+        }
+    }
+}
