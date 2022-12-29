@@ -166,3 +166,96 @@
         }
     }
 }
+
+namespace DesignPatterns.MementoV2
+{ 
+    public class GameOriginator
+    {
+        private GameState _state = new GameState(100, 0);
+
+        public void Play()
+        {
+            Console.WriteLine(_state.ToString());
+            _state = new GameState((int)(_state.Health * 0.9), _state.KilledMonsters + 2);
+        }
+
+        public GameMemento GameSave()
+        {
+            return new GameMemento(_state);
+        }
+
+        public void LoadGame(GameMemento memento)
+        {
+            _state = memento.GetState();
+        }
+    }
+
+    public class GameState
+    {
+        public int Health { get; }
+        public int KilledMonsters { get; }
+        public GameState(int health, int kills)
+        {
+            Health = health;
+            KilledMonsters = kills;
+        }
+
+        public override string ToString()
+        {
+            return $"Health: {Health}\nKilled Monsters: {KilledMonsters}";
+        }
+    }
+
+    public class Client
+    {
+        public void Main()
+        {
+            var caretaker = new Caretaker();
+            caretaker.F5();
+            caretaker.ShootThatDumbAss();
+            caretaker.F5();
+            caretaker.ShootThatDumbAss();
+            caretaker.ShootThatDumbAss();
+            caretaker.ShootThatDumbAss();
+            caretaker.ShootThatDumbAss();
+            caretaker.F9();
+            caretaker.ShootThatDumbAss();
+        }
+    }
+
+    public class GameMemento
+    {
+        private readonly GameState _state;
+
+        public GameMemento(GameState state)
+        {
+            _state = state;
+        }
+
+        public GameState GetState()
+        {
+            return _state;
+        }
+    }
+
+    public class Caretaker
+    {
+        private readonly GameOriginator _game = new GameOriginator();
+        private readonly Stack<GameMemento> _quickSaves = new Stack<GameMemento>();
+
+        public void ShootThatDumbAss()
+        {
+            _game.Play();
+        }
+
+        public void F5()
+        {
+            _quickSaves.Push(_game.GameSave());
+        }
+
+        public void F9()
+        {
+            _game.LoadGame(_quickSaves.Peek());
+        }
+    }
+}

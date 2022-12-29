@@ -1,3 +1,3 @@
-﻿using DesignPatterns.MediatorV2;
+﻿using DesignPatterns.MementoV2;
 
 new Client().Main();
