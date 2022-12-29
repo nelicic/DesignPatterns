@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 
 namespace DesignPatterns.Iterator
 {
@@ -120,3 +119,91 @@ namespace DesignPatterns.Iterator
         }
     }
 }
+
+
+/*namespace DesignPatterns.IteratorV2
+{
+    public class Soldier
+    {
+        public string Name;
+        public int Health;
+        private const int SoldierHealthPoints = 100;
+        protected virtual int MaxHealthPoints { get => SoldierHealthPoints; }
+
+        public Soldier(string name)
+        {
+            Name = name;
+        }
+
+        public void Treat()
+        {
+            Health = MaxHealthPoints;
+            Console.WriteLine(Name);
+        }
+    }
+
+    public class Hero : Soldier
+    {
+        private const int HeroHealthPoints = 500;
+        protected override int MaxHealthPoints { get => HeroHealthPoints; }
+        public Hero(string name) : base(name)
+        { }
+    }
+
+    public class SoldiersIterator
+    {
+        private readonly Army _army;
+        private bool _heroIsIterated;
+        private int _currentGroup;
+        private int _currentGroupSoldier;
+
+        public SoldiersIterator(Army army)
+        {
+            _army = army;
+            _heroIsIterated = false;
+            _currentGroup = 0;
+            _currentGroupSoldier = 0;
+        }
+
+        public bool HasNext()
+        {
+            if (!_heroIsIterated)
+                return true;
+            if (_currentGroup < _army.ArmyGroups.Count)
+                return true;
+            if (_currentGroup == _army.ArmyGroups.Count - 1)
+                if (_currentGroupSoldier < _army.ArmyGroup[_currentGroup].Soldiers.Count)
+                    return true;
+            return false;
+        }
+
+        public Soldier Next()
+        {
+            Soldier nextSoldier;
+            if (_currentGroup < _army.ArmyGroups.Count)
+            {
+                if (_currentGroupSoldier < _army.ArmyGroups[_currentGroup].Soldiers.Count)
+                {
+                    nextSoldier = _army.ArmyGroups[_currentGroup].Soldiers[_currentGroupSoldier];
+                    _currentGroupSoldier++;
+                }
+                else 
+                {
+                    _currentGroup++;
+                    _currentGroupSoldier = 0;
+                    return Next();
+                }
+            }
+            else if (!_heroIsIterated)
+            {
+                _heroIsIterated = true;
+                return _army.ArmyHero;
+            }    
+            else
+            {
+                throw new Exception("End of collection");
+            }   
+            return nextSoldier;
+        }
+    }
+}*/
