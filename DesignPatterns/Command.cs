@@ -104,3 +104,122 @@
         }
     }
 }
+
+namespace DesignPatterns.CommandV2
+{
+    public interface ICommand
+    {
+        void Execute();
+    }
+
+    class Team
+    {
+        public string Name { get; set; }
+        public Team(string name)
+        {
+            Name = name;
+        }
+
+        public void CompleteProject(List<Requirement> requirements)
+        {
+            string str = string.Empty;
+            requirements.ForEach(requirement => str += requirement.Name + " ");
+            Console.WriteLine($"Team completed the project with those requirements {str}");
+        }
+    }
+
+    class Requirement
+    {
+        public string Name { get; set; }
+        public Requirement(string name)
+        {
+            Name = name;
+        }
+    }
+
+    class YouAsProjectManagerCommand : ICommand
+    {
+        protected Team Team { get; set; }
+        protected List<Requirement> Requirements { get; set; }
+        public YouAsProjectManagerCommand(Team team, List<Requirement> requirements)
+        {
+            Team = team;
+            Requirements = requirements;
+        }
+        public void Execute()
+        {
+            Team.CompleteProject(Requirements);
+        }
+    }
+
+    class HeroDeveloperCommand : ICommand
+    {
+        protected HeroDeveloper HeroDeveloper { get; set; }
+        public string ProjectName { get; set; }
+        public HeroDeveloperCommand(HeroDeveloper herodDeveloper, string projectName)
+        {
+            HeroDeveloper = herodDeveloper;
+            ProjectName = projectName;
+        }
+
+        public void Execute()
+        {
+            HeroDeveloper.DoAllHardWork(ProjectName);
+        }
+    }
+
+    class HeroDeveloper
+    { 
+        public void DoAllHardWork(string projectName)
+        {
+            Console.WriteLine("Hero developer finished the project");
+        }
+    }
+
+
+    class Customer
+    {
+        protected List<ICommand> Commands { get; set; }
+        public Customer()
+        {
+            Commands = new List<ICommand>();
+        }
+        public void AddCommand(ICommand command)
+        {
+            Commands.Add(command);
+        }
+        public void SignContractWithBoss()
+        {
+            foreach (var command in Commands)
+                command.Execute();
+        }
+    }
+
+    public class Client
+    {
+        public void Main()
+        {
+            var customer = new Customer();
+
+            var team = new Team("My team");
+
+            var requirements = new List<Requirement>()
+            {
+                new Requirement("req 1"),
+                new Requirement("req 2"),
+                new Requirement("req 3")
+            };
+
+            ICommand commandX = new YouAsProjectManagerCommand(team, requirements);
+
+            var heroDeveloper = new HeroDeveloper();
+
+            ICommand commandA = new HeroDeveloperCommand(heroDeveloper, "ProjectX");
+
+            customer.AddCommand(commandX);
+            customer.AddCommand(commandA);
+
+            customer.SignContractWithBoss();
+        }
+    }
+}
