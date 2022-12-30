@@ -86,3 +86,75 @@
     }
 
 }
+
+
+namespace DesignPatterns.TemplateMethodV2
+{
+    public class MessageSearcher
+    {
+        protected DateTime DateSent;
+        protected string PersonName;
+        protected int ImportanceLevel;
+
+        public MessageSearcher(DateTime dateSent, string personName, int importanceLevel)
+        {
+            DateSent = dateSent;
+            PersonName = personName;
+            ImportanceLevel = importanceLevel;
+        }
+
+        protected virtual void CreateDateCriteria()
+        {
+            Console.WriteLine("Standard date criteria has been applied.");
+        }
+        protected virtual void CreateSentPersonCriteria()
+        {
+            Console.WriteLine("Standard person criteria has been applied.");
+        }
+        protected virtual void CreateImportanceCriteria()
+        {
+            Console.WriteLine("Standard importance criteria has been applied.");
+        }
+
+        public string Search()
+        {
+            CreateDateCriteria();
+            CreateSentPersonCriteria();
+            Console.WriteLine("Template method does some verification accordingly to search algo.");
+            CreateImportanceCriteria();
+            Console.WriteLine("Template method verifies if message could be so important or useless from person provided in criteria.");
+            Console.WriteLine();
+            return "Some list of messages...";
+        }
+    }
+
+    public class ImportantMessagesSearcher : MessageSearcher
+    {
+        public ImportantMessagesSearcher(DateTime dateSent, String personName)
+            : base(dateSent, personName, 3)
+        { }
+        protected override void CreateImportanceCriteria()
+            => Console.WriteLine("Special importance criteria has been formed: IMPORTANT");
+    }
+
+    class UselessMessagesSearcher : MessageSearcher
+    {
+        public UselessMessagesSearcher(DateTime dateSent, String personName)
+        : base(dateSent, personName, 1)
+        { }
+        protected override void CreateImportanceCriteria()
+            => Console.WriteLine("Special importance criteria has been formed: USELESS");
+    }
+
+    public class Client
+    {
+        public void Main()
+        {
+            MessageSearcher searcher = new UselessMessagesSearcher(DateTime.Today, "Sally");
+            searcher.Search();
+
+            searcher = new ImportantMessagesSearcher(DateTime.Today, "Killer");
+            searcher.Search();
+        }
+    }
+}
