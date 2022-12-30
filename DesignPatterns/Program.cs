@@ -1,3 +1,3 @@
-﻿using DesignPatterns.MementoV2;
+﻿using DesignPatterns.ObserverV2;
 
 new Client().Main();
