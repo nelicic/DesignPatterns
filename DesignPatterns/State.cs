@@ -81,3 +81,80 @@
         }
     }
 }
+
+
+/*namespace DesignPatterns.StateV2
+{
+    public class Product
+    { }
+    public class Order
+    {
+        private OrderState _state;
+        private List<Product> _products = new List<Product>();
+        public Order() => _state = new NewOrder(this);
+        public void SetOrderState(OrderState state) => _state = state;
+        public void WriteCurrentStateName() => Console.WriteLine("Current Order's state: {0}", _state.GetType().Name);
+        public void Ship() => _state.Ship();
+    }
+
+    class OrderState
+    {
+        public Order _order;
+        public OrderState(Order order)
+        {
+            _order = order;
+        }
+        public virtual void AddProduct()
+        {
+            OperationIsNotAllowed("AddProduct");
+        }
+        private void OperationIsNotAllowed(string operationName)
+        {
+            Console.WriteLine("Operation {0} is not allowed for Order's state {1}",
+            operationName, GetType().Name);
+        }
+    }
+
+    class Granted : OrderState
+    {
+        public Granted(Order order)
+        : base(order)
+        { }
+        public override void AddProduct()
+        {
+            _order.DoAddProduct();
+        }
+        public override void Ship()
+        {
+            _order.DoShipping();
+            _order.SetOrderState(new Shipped(_order));
+        }
+        public override void Cancel()
+        {
+            _order.DoCancel();
+            _order.SetOrderState(new Cancelled(_order));
+        }
+    }
+
+
+    class Client
+    { 
+        public void Main()
+        {
+            Product beer = new Product();
+            beer.Name = "MyBestBeer";
+            beer.Price = 78000;
+            Order order = new Order();
+            order.WriteCurrentStateName();
+            order.AddProduct(beer);
+            order.WriteCurrentStateName();
+            order.Register();
+            order.WriteCurrentStateName();
+            order.Grant();
+            order.WriteCurrentStateName();
+            order.Ship();
+            order.WriteCurrentStateName();
+
+        }
+    }
+}*/
