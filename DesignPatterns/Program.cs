@@ -1,3 +1,3 @@
-﻿using DesignPatterns.ObserverV2;
+﻿using DesignPatterns.StrategyV2;
 
 new Client().Main();

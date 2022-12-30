@@ -78,3 +78,51 @@
         }
     }
 }
+
+
+namespace DesignPatterns.StrategyV2
+{
+    class Myself
+    {
+        private IWearingStrategy _wearingStrategy = new SunshineWearingStrategy();
+        public void ChangeStrategy(IWearingStrategy wearingStrategy)
+        {
+            _wearingStrategy = wearingStrategy;
+        }
+        public void GoOutside()
+        {
+            var clothes = _wearingStrategy.GetClothes();
+            var accessories = _wearingStrategy.GetAccessories();
+            Console.WriteLine("Today I wore {0} and took {1}", clothes, accessories);
+        }
+    }
+
+    interface IWearingStrategy
+    {
+        string GetClothes();
+        string GetAccessories();
+    }
+
+    class SunshineWearingStrategy : IWearingStrategy
+    {
+        public string GetClothes() => "T-Shirt";
+        public string GetAccessories() => "sunglasses";
+    }
+
+    public class Client
+    {
+        public void Main()
+        {
+            var me = new Myself();
+            me.ChangeStrategy(new SunshineWearingStrategy());
+            me.GoOutside();
+        }
+    }
+
+    internal class RainWearingStrategy : IWearingStrategy
+    {
+        public string GetAccessories() => "Umbrella";
+
+        public string GetClothes() => "Coat";
+    }
+}
